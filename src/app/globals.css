@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/* ========================================
+   Global Styles – Mobile-First Dark Theme
+   ======================================== */
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* Typography – Prose styles for static pages (Privacy, DMCA) */
+.prose {
+  color: #d1d5db; /* gray-300 */
+  line-height: 1.75;
+}
+
+.prose h1 {
+  color: #f3f4f6; /* gray-100 */
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.prose h2 {
+  color: #e5e7eb; /* gray-200 */
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.prose ol,
+.prose ul {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose a {
+  color: #a78bfa; /* violet-400 */
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: #c4b5fd; /* violet-300 */
+}
+
+.prose strong {
+  color: #f3f4f6; /* gray-100 */
+}
+
+/* Scrollbar – thin dark scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374151; /* gray-700 */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563; /* gray-600 */
+}
+
+/* Image error state fallback */
+img[data-error="true"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1f2937; /* gray-800 */
+  color: #6b7280; /* gray-500 */
+  font-size: 0.75rem;
+}
+
+@keyframes hero-kenburns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+.hero-kenburns {
+  animation: hero-kenburns 9s ease-out forwards;
+  transform-origin: center center;
+}
+
+@keyframes logo-intro {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo-intro {
+  animation: logo-intro 380ms ease-out both;
+}
+
