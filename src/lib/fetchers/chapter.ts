@@ -83,6 +83,21 @@ export async function getChapterBySlug(slug: string) {
   const chapter = await Chapter.findOne({ slug })
     .lean<IChapter | null>();
 
+  if (!chapter) {
+    return null;
+  }
+
+  const parentManhwa = await Manhwa.findOne({
+    slug: chapter.manhwaSlug,
+    publicationStatus: "published",
+  })
+    .select({ _id: 1 })
+    .lean<{ _id: unknown } | null>();
+
+  if (!parentManhwa) {
+    return null;
+  }
+
   return chapter;
 }
 
@@ -138,6 +153,7 @@ export async function getChapterDropdownList(manhwaSlug: string) {
   const chapters = await Chapter.find({ manhwaSlug })
     .select(DROPDOWN_PROJECTION)
     .sort({ chapterNumber: 1 })
+    .limit(3000)
     .lean<{ chapterNumber: number; slug: string }[]>();
 
   return chapters;

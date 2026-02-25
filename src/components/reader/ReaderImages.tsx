@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { FALLBACK_IMAGES } from "@/config/constants";
 import { buildWeservUrl } from "@/utils/images";
 
@@ -37,15 +38,13 @@ function ReaderImage({ src, alt, width, height, priority }: ReaderImageProps) {
           Image failed to load
         </div>
       ) : (
-        <img
+        <Image
           src={imgSrc}
           alt={alt}
           width={width}
           height={height}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          referrerPolicy="no-referrer"
-          fetchPriority={priority ? "high" : "auto"}
+          priority={priority}
+          unoptimized
           className="h-auto w-full"
           onError={() => {
             if (imgSrc === proxiedSrc && originalSrc && originalSrc !== proxiedSrc) {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { ManhwaCard as ManhwaCardType } from "@/types";
 
 interface ManhwaCardProps {
@@ -22,15 +23,14 @@ export default function ManhwaCard({ manhwa, priority = false }: ManhwaCardProps
                  hover:shadow-lg hover:shadow-violet-500/10"
     >
       {/* Cover image container — 3:4 aspect ratio */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-800">
-        <img
+      <div className="relative aspect-3/4 w-full overflow-hidden bg-gray-800">
+        <Image
           src={manhwa.coverImage}
           alt={`${manhwa.title} cover`}
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : "auto"}
-          decoding="async"
-          referrerPolicy="no-referrer"
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+          priority={priority}
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
 
         {/* Status badge */}

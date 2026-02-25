@@ -4,7 +4,6 @@ import { timeAgo } from "@/utils/format";
 
 interface ChapterListProps {
   chapters: ChapterListItem[];
-  manhwaSlug: string;
 }
 
 /**
@@ -17,7 +16,6 @@ interface ChapterListProps {
  */
 export default function ChapterList({
   chapters,
-  manhwaSlug,
 }: ChapterListProps) {
   if (chapters.length === 0) {
     return (
@@ -46,8 +44,7 @@ export default function ChapterList({
           <li key={chapter.slug}>
             <Link
               href={`/chapter/${chapter.slug}`}
-              className="flex min-h-[44px] items-center justify-between gap-3 px-4 py-3 
-                         transition-colors hover:bg-gray-800/60"
+              className="flex min-h-11 items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-gray-800/60"
             >
               {/* Chapter label */}
               <span className="text-sm font-medium text-gray-200">

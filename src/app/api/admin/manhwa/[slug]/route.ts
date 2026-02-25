@@ -55,42 +55,44 @@ export async function PATCH(req: Request, { params }: Params) {
     );
   }
 
-  if (parsed.data.slug !== slug) {
-    const slugTaken = await Manhwa.findOne({ slug: parsed.data.slug })
+  try {
+    const updated = await Manhwa.findOneAndUpdate(
+      { slug },
+      {
+        title: parsed.data.title,
+        slug: parsed.data.slug,
+        coverImage: parsed.data.coverImage,
+        synopsis: parsed.data.synopsis,
+        genres: parsed.data.genres,
+        rating: parsed.data.rating,
+        publicationStatus: parsed.data.publicationStatus,
+        status: parsed.data.status,
+      },
+      { new: true }
+    )
       .select({ slug: 1, _id: 0 })
       .lean<{ slug: string } | null>();
 
-    if (slugTaken) {
+    if (!updated) {
+      return NextResponse.json({ error: "Manhwa not found" }, { status: 404 });
+    }
+
+    if (parsed.data.slug !== slug) {
+      await Chapter.updateMany({ manhwaSlug: slug }, { manhwaSlug: parsed.data.slug });
+    }
+
+    return NextResponse.json({ slug: updated.slug });
+  } catch (error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code: number }).code === 11000
+    ) {
       return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
     }
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-
-  const updated = await Manhwa.findOneAndUpdate(
-    { slug },
-    {
-      title: parsed.data.title,
-      slug: parsed.data.slug,
-      coverImage: parsed.data.coverImage,
-      synopsis: parsed.data.synopsis,
-      genres: parsed.data.genres,
-      rating: parsed.data.rating,
-      publicationStatus: parsed.data.publicationStatus,
-      status: parsed.data.status,
-    },
-    { new: true }
-  )
-    .select({ slug: 1, _id: 0 })
-    .lean<{ slug: string } | null>();
-
-  if (!updated) {
-    return NextResponse.json({ error: "Manhwa not found" }, { status: 404 });
-  }
-
-  if (parsed.data.slug !== slug) {
-    await Chapter.updateMany({ manhwaSlug: slug }, { manhwaSlug: parsed.data.slug });
-  }
-
-  return NextResponse.json({ slug: updated.slug });
 }
 
 export async function DELETE(_req: Request, { params }: Params) {

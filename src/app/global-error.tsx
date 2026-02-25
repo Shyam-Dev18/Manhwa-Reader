@@ -16,7 +16,9 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           <p className="mt-3 max-w-md text-sm text-gray-400 sm:text-base">
             Something went wrong while rendering this page.
           </p>
-          <p className="mt-1 text-xs text-gray-500">{error.message}</p>
+          {error.digest ? (
+            <p className="mt-1 text-xs text-gray-500">Error ID: {error.digest}</p>
+          ) : null}
           <button
             type="button"
             onClick={reset}

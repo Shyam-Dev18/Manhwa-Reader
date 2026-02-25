@@ -88,7 +88,7 @@ export default function ManhwaTable({ items }: ManhwaTableProps) {
               </TableCell>
               <TableCell className="capitalize">{item.status}</TableCell>
               <TableCell>{item.rating.toFixed(1)}</TableCell>
-              <TableCell className="max-w-[280px] truncate">{item.genres.join(", ")}</TableCell>
+              <TableCell className="max-w-70 truncate">{item.genres.join(", ")}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Link href={`/admin/manhwa/${item.slug}/chapters`}>

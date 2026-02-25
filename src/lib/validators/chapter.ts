@@ -13,7 +13,10 @@ export const adminChapterWriteSchema = z.object({
   chapterNumber: z.number().int().min(0),
   title: z.string().trim().max(300).optional().or(z.literal("")),
   slug: z.string().trim().toLowerCase().regex(slugRegex),
-  images: z.array(chapterImageSchema).min(1, "At least one image is required"),
+  images: z
+    .array(chapterImageSchema)
+    .min(1, "At least one image is required")
+    .max(500, "Cannot exceed 500 images per chapter"),
 }).refine(
   (data) => new Set(data.images.map((img) => img.order)).size === data.images.length,
   {
@@ -37,7 +40,9 @@ export const adminChapterFormSchema = z.object({
       height: z.number().int().min(1, "Height must be >= 1"),
       order: z.number().int().min(0, "Order must be >= 0"),
     })
-  ).min(1, "At least one image is required"),
+  )
+    .min(1, "At least one image is required")
+    .max(500, "Cannot exceed 500 images per chapter"),
 }).refine(
   (data) => new Set(data.images.map((img) => img.order)).size === data.images.length,
   {

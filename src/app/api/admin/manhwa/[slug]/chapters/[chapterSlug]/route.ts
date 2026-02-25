@@ -48,65 +48,58 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: "Chapter not found" }, { status: 404 });
   }
 
-  if (parsed.data.chapterNumber !== existing.chapterNumber) {
-    const numberTaken = await Chapter.findOne({
-      manhwaSlug: slug,
-      chapterNumber: parsed.data.chapterNumber,
-    })
+  try {
+    const updated = await Chapter.findOneAndUpdate(
+      { manhwaSlug: slug, slug: chapterSlug },
+      {
+        chapterNumber: parsed.data.chapterNumber,
+        title: parsed.data.title || undefined,
+        slug: parsed.data.slug,
+        images: sortImagesAscending(parsed.data.images),
+      },
+      { new: true }
+    )
       .select({ slug: 1, _id: 0 })
       .lean<{ slug: string } | null>();
 
-    if (numberTaken) {
+    if (!updated) {
+      return NextResponse.json({ error: "Chapter not found" }, { status: 404 });
+    }
+
+    const [latestChapter] = await Promise.all([
+      Chapter.find({ manhwaSlug: slug })
+        .sort({ chapterNumber: -1 })
+        .limit(1)
+        .select({ chapterNumber: 1, _id: 0 })
+        .lean<{ chapterNumber: number }[]>(),
+    ]);
+
+    await Manhwa.findOneAndUpdate(
+      { slug },
+      {
+        latestChapterNumber: latestChapter[0]?.chapterNumber ?? 0,
+      }
+    );
+
+    return NextResponse.json({ slug: updated.slug });
+  } catch (error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code: number }).code === 11000
+    ) {
+      const duplicateError = error as { keyPattern?: { slug?: number } };
+      if (duplicateError.keyPattern?.slug) {
+        return NextResponse.json({ error: "Chapter slug already exists" }, { status: 409 });
+      }
       return NextResponse.json(
         { error: "Chapter number already exists for this manhwa" },
         { status: 409 }
       );
     }
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-
-  if (parsed.data.slug !== chapterSlug) {
-    const slugTaken = await Chapter.findOne({ slug: parsed.data.slug })
-      .select({ slug: 1, _id: 0 })
-      .lean<{ slug: string } | null>();
-
-    if (slugTaken) {
-      return NextResponse.json({ error: "Chapter slug already exists" }, { status: 409 });
-    }
-  }
-
-  const updated = await Chapter.findOneAndUpdate(
-    { manhwaSlug: slug, slug: chapterSlug },
-    {
-      chapterNumber: parsed.data.chapterNumber,
-      title: parsed.data.title || undefined,
-      slug: parsed.data.slug,
-      images: sortImagesAscending(parsed.data.images),
-    },
-    { new: true }
-  )
-    .select({ slug: 1, _id: 0 })
-    .lean<{ slug: string } | null>();
-
-  if (!updated) {
-    return NextResponse.json({ error: "Chapter not found" }, { status: 404 });
-  }
-
-  const [latestChapter] = await Promise.all([
-    Chapter.find({ manhwaSlug: slug })
-      .sort({ chapterNumber: -1 })
-      .limit(1)
-      .select({ chapterNumber: 1, _id: 0 })
-      .lean<{ chapterNumber: number }[]>(),
-  ]);
-
-  await Manhwa.findOneAndUpdate(
-    { slug },
-    {
-      latestChapterNumber: latestChapter[0]?.chapterNumber ?? 0,
-    }
-  );
-
-  return NextResponse.json({ slug: updated.slug });
 }
 
 export async function DELETE(_req: Request, { params }: Params) {

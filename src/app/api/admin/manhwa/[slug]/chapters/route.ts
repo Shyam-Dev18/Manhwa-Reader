@@ -48,43 +48,40 @@ export async function POST(req: Request, { params }: Params) {
     return NextResponse.json({ error: "Manhwa not found" }, { status: 404 });
   }
 
-  const chapterNumberTaken = await Chapter.findOne({
-    manhwaSlug: slug,
-    chapterNumber: parsed.data.chapterNumber,
-  })
-    .select({ slug: 1, _id: 0 })
-    .lean<{ slug: string } | null>();
+  try {
+    const created = await Chapter.create({
+      manhwaSlug: slug,
+      chapterNumber: parsed.data.chapterNumber,
+      title: parsed.data.title || undefined,
+      slug: parsed.data.slug,
+      images: sortImagesAscending(parsed.data.images),
+    });
 
-  if (chapterNumberTaken) {
-    return NextResponse.json(
-      { error: "Chapter number already exists for this manhwa" },
-      { status: 409 }
+    await Manhwa.findOneAndUpdate(
+      { slug },
+      {
+        $max: { latestChapterNumber: parsed.data.chapterNumber },
+        $inc: { totalChapters: 1 },
+      }
     );
-  }
 
-  const slugTaken = await Chapter.findOne({ slug: parsed.data.slug })
-    .select({ slug: 1, _id: 0 })
-    .lean<{ slug: string } | null>();
-
-  if (slugTaken) {
-    return NextResponse.json({ error: "Chapter slug already exists" }, { status: 409 });
-  }
-
-  const created = await Chapter.create({
-    manhwaSlug: slug,
-    chapterNumber: parsed.data.chapterNumber,
-    title: parsed.data.title || undefined,
-    slug: parsed.data.slug,
-    images: sortImagesAscending(parsed.data.images),
-  });
-
-  await Manhwa.findOneAndUpdate(
-    { slug },
-    {
-      $max: { latestChapterNumber: parsed.data.chapterNumber },
-      $inc: { totalChapters: 1 },
+    return NextResponse.json({ slug: created.slug }, { status: 201 });
+  } catch (error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code: number }).code === 11000
+    ) {
+      const duplicateError = error as { keyPattern?: { slug?: number } };
+      if (duplicateError.keyPattern?.slug) {
+        return NextResponse.json({ error: "Chapter slug already exists" }, { status: 409 });
+      }
+      return NextResponse.json(
+        { error: "Chapter number already exists for this manhwa" },
+        { status: 409 }
+      );
     }
-  );
-
-  return NextResponse.json({ slug: created.slug }, { status: 201 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 }

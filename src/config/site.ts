@@ -2,7 +2,7 @@ export const siteConfig = {
   name: "ManhwaVerse",
   description:
     "Read top manhwa chapters with a fast, modern, mobile-first reading experience.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://example.com",
   ogImage: "/logo.png",
   creator: "ManhwaVerse",
   keywords: [

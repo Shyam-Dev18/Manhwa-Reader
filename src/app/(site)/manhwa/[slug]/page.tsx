@@ -90,7 +90,7 @@ export default async function ManhwaPage({ params }: ManhwaPageProps) {
       />
       <ManhwaHeader manhwa={manhwa} />
       <ManhwaInfo synopsis={manhwa.synopsis} />
-      <ChapterList chapters={chapters} manhwaSlug={manhwa.slug} />
+      <ChapterList chapters={chapters} />
     </article>
   );
 }

@@ -158,7 +158,6 @@ manhwaSchema.index(
   {
     title: "text",
     alternativeTitles: "text",
-    altTitles: "text",
     genres: "text",
   },
   { name: "manhwa_text_search" }

@@ -9,7 +9,7 @@ import { siteConfig } from "@/config/site";
  */
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 via-gray-900 to-violet-950 border border-gray-800">
+    <section className="relative overflow-hidden rounded-xl bg-linear-to-br from-gray-900 via-gray-900 to-violet-950 border border-gray-800">
       {/* Decorative glow */}
       <div
         className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full 

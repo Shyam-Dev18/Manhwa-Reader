@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { siteConfig } from "@/config/site";
 
@@ -36,7 +37,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
 
   if (slides.length === 0) {
     return (
-      <section className="relative overflow-hidden rounded-xl border border-gray-800 bg-gradient-to-br from-gray-900 via-gray-900 to-violet-950">
+      <section className="relative overflow-hidden rounded-xl border border-gray-800 bg-linear-to-br from-gray-900 via-gray-900 to-violet-950">
         <div className="relative px-5 py-10 text-center sm:px-8 sm:py-14 lg:py-16">
           <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">
             Welcome to <span className="text-violet-400">{siteConfig.name}</span>
@@ -59,18 +60,17 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
               href={`/manhwa/${item.slug}`}
               className="relative min-w-0 flex-[0_0_100%]"
             >
-              <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-800 sm:aspect-[21/9]">
-                <img
+              <div className="relative aspect-video w-full overflow-hidden bg-gray-800 sm:aspect-21/9">
+                <Image
                   src={item.coverImage}
                   alt={`${item.title} cover`}
-                  loading={index === 0 ? "eager" : "lazy"}
-                  fetchPriority={index === 0 ? "high" : "auto"}
-                  decoding="async"
-                  referrerPolicy="no-referrer"
-                  className="hero-kenburns h-full w-full object-cover"
+                  fill
+                  sizes="100vw"
+                  priority={index === 0}
+                  className="hero-kenburns object-cover"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
 
                 <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
                   <div className="inline-flex items-center rounded-full bg-yellow-500/90 px-2.5 py-1 text-xs font-semibold text-gray-950">

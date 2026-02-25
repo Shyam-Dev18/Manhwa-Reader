@@ -12,7 +12,7 @@ export default function ManhwaLoading() {
       <div className="flex flex-col gap-5 sm:flex-row sm:gap-6">
         {/* Cover placeholder */}
         <div className="mx-auto w-48 shrink-0 sm:mx-0 sm:w-52 md:w-56">
-          <div className="aspect-[3/4] rounded-lg bg-gray-800" />
+          <div className="aspect-3/4 rounded-lg bg-gray-800" />
         </div>
 
         {/* Info placeholder */}
@@ -71,7 +71,7 @@ export default function ManhwaLoading() {
           {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
-              className="flex min-h-[44px] items-center justify-between px-4 py-3"
+              className="flex min-h-11 items-center justify-between px-4 py-3"
             >
               <div className="h-4 w-28 rounded bg-gray-800" />
               <div className="h-3 w-14 rounded bg-gray-800/40" />

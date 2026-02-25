@@ -14,7 +14,9 @@ export default function SiteError({ error, reset }: SiteErrorProps) {
       <p className="mt-2 max-w-md text-sm text-gray-400">
         We couldn&apos;t load this page right now. Please try again.
       </p>
-      <p className="mt-1 text-xs text-gray-500">{error.message}</p>
+      {error.digest ? (
+        <p className="mt-1 text-xs text-gray-500">Error ID: {error.digest}</p>
+      ) : null}
       <button
         type="button"
         onClick={reset}

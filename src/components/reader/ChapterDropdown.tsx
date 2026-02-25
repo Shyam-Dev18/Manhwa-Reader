@@ -24,10 +24,7 @@ export default function ChapterDropdown({
     <select
       value={currentSlug}
       onChange={(e) => router.push(`/chapter/${e.target.value}`)}
-      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm 
-                 text-gray-200 outline-none transition-colors
-                 focus:border-violet-500 focus:ring-1 focus:ring-violet-500
-                 sm:w-auto"
+      className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-200 outline-none transition-colors focus:border-violet-500 focus:ring-1 focus:ring-violet-500 sm:w-auto"
       aria-label="Select chapter"
     >
       {chapters.map((ch) => (

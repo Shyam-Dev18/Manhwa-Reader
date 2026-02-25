@@ -30,31 +30,35 @@ export async function POST(req: Request) {
 
   await dbConnect();
 
-  const existing = await Manhwa.findOne({ slug: parsed.data.slug })
-    .select({ slug: 1, _id: 0 })
-    .lean<{ slug: string } | null>();
+  try {
+    const created = await Manhwa.create({
+      title: parsed.data.title,
+      slug: parsed.data.slug,
+      coverImage: parsed.data.coverImage,
+      synopsis: parsed.data.synopsis,
+      genres: parsed.data.genres,
+      rating: parsed.data.rating,
+      publicationStatus: parsed.data.publicationStatus,
+      status: parsed.data.status,
+      alternativeTitles: [],
+      authors: [],
+      artists: [],
+      studio: "",
+      releaseYear: 0,
+      totalChapters: 0,
+      latestChapterNumber: 0,
+    });
 
-  if (existing) {
-    return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
+    return NextResponse.json({ slug: created.slug }, { status: 201 });
+  } catch (error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code: number }).code === 11000
+    ) {
+      return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
+    }
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-
-  const created = await Manhwa.create({
-    title: parsed.data.title,
-    slug: parsed.data.slug,
-    coverImage: parsed.data.coverImage,
-    synopsis: parsed.data.synopsis,
-    genres: parsed.data.genres,
-    rating: parsed.data.rating,
-    publicationStatus: parsed.data.publicationStatus,
-    status: parsed.data.status,
-    alternativeTitles: [],
-    authors: [],
-    artists: [],
-    studio: "",
-    releaseYear: 0,
-    totalChapters: 0,
-    latestChapterNumber: 0,
-  });
-
-  return NextResponse.json({ slug: created.slug }, { status: 201 });
 }

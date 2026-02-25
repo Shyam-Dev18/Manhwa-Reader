@@ -39,11 +39,9 @@ interface MongooseCache {
  * Extend globalThis to hold our cache.
  * Using `var` is intentional — it declares on globalThis in Node.js.
  */
-/* eslint-disable no-var */
 declare global {
   var mongooseCache: MongooseCache | undefined;
 }
-/* eslint-enable no-var */
 
 const cached: MongooseCache = globalThis.mongooseCache ?? {
   conn: null,
