@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { siteConfig } from "@/config/site";
+import { buildWeservUrl } from "@/utils/images";
 
 interface HeroSlide {
   title: string;
@@ -54,21 +55,24 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
     <section className="relative overflow-hidden rounded-xl border border-gray-800 bg-gray-900">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
-          {slides.map((item, index) => (
-            <Link
-              key={item.slug}
-              href={`/manhwa/${item.slug}`}
-              className="relative min-w-0 flex-[0_0_100%]"
-            >
-              <div className="relative aspect-video w-full overflow-hidden bg-gray-800 sm:aspect-21/9">
-                <Image
-                  src={item.coverImage}
-                  alt={`${item.title} cover`}
-                  fill
-                  sizes="100vw"
-                  priority={index === 0}
-                  className="hero-kenburns object-cover"
-                />
+          {slides.map((item, index) => {
+            const coverSrc = buildWeservUrl(item.coverImage) || item.coverImage;
+
+            return (
+              <Link
+                key={item.slug}
+                href={`/manhwa/${item.slug}`}
+                className="relative min-w-0 flex-[0_0_100%]"
+              >
+                <div className="relative aspect-video w-full overflow-hidden bg-gray-800 sm:aspect-21/9">
+                  <Image
+                    src={coverSrc}
+                    alt={`${item.title} cover`}
+                    fill
+                    sizes="100vw"
+                    priority={index === 0}
+                    className="hero-kenburns object-cover"
+                  />
 
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
 
@@ -80,9 +84,10 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
                     {item.title}
                   </h1>
                 </div>
-              </div>
-            </Link>
-          ))}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

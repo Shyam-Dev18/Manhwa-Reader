@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { ManhwaCard as ManhwaCardType } from "@/types";
+import { buildWeservUrl } from "@/utils/images";
 
 interface ManhwaCardProps {
   manhwa: ManhwaCardType;
@@ -15,6 +16,8 @@ interface ManhwaCardProps {
  * Desktop: fixed aspect ratio in grid columns.
  */
 export default function ManhwaCard({ manhwa, priority = false }: ManhwaCardProps) {
+  const coverSrc = buildWeservUrl(manhwa.coverImage) || manhwa.coverImage;
+
   return (
     <Link
       href={`/manhwa/${manhwa.slug}`}
@@ -25,7 +28,7 @@ export default function ManhwaCard({ manhwa, priority = false }: ManhwaCardProps
       {/* Cover image container — 3:4 aspect ratio */}
       <div className="relative aspect-3/4 w-full overflow-hidden bg-gray-800">
         <Image
-          src={manhwa.coverImage}
+          src={coverSrc}
           alt={`${manhwa.title} cover`}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"

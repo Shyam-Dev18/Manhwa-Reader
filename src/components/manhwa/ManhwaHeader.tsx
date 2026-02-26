@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Manhwa } from "@/types";
+import { buildWeservUrl } from "@/utils/images";
 
 interface ManhwaHeaderProps {
   manhwa: Manhwa;
@@ -14,13 +15,15 @@ interface ManhwaHeaderProps {
  *   - Desktop: side-by-side (cover left, info right)
  */
 export default function ManhwaHeader({ manhwa }: ManhwaHeaderProps) {
+  const coverSrc = buildWeservUrl(manhwa.coverImage) || manhwa.coverImage;
+
   return (
     <div className="flex flex-col gap-5 sm:flex-row sm:gap-6">
       {/* Cover image — fixed aspect ratio */}
       <div className="mx-auto w-48 shrink-0 sm:mx-0 sm:w-52 md:w-56">
         <div className="relative aspect-3/4 overflow-hidden rounded-lg bg-gray-800 shadow-lg shadow-black/30">
           <Image
-            src={manhwa.coverImage}
+            src={coverSrc}
             alt={`${manhwa.title} cover`}
             fill
             sizes="(max-width: 640px) 192px, (max-width: 768px) 208px, 224px"
