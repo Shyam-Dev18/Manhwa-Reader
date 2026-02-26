@@ -5,6 +5,7 @@ export {
   getManhwaSitemapEntries,
   getSearchResults,
   getTopRatedManhwa,
+  getTopRatedManhwaGrid,
   getAdminManhwaList,
   getAdminManhwaBySlug,
 } from "./manhwa";

@@ -230,6 +230,39 @@ export async function getTopRatedManhwa(limit: number = 5) {
 }
 
 /**
+ * Fetch top-rated manhwa for grid sections.
+ * Returns full card fields for ManhwaGrid.
+ */
+export async function getTopRatedManhwaGrid(
+  limit: number = PAGINATION.HOME_PAGE_SIZE
+) {
+  await dbConnect();
+
+  const safeLimit = Math.max(1, Math.min(50, Math.floor(limit)));
+
+  const results = await Manhwa.find({})
+    .where("publicationStatus")
+    .equals("published")
+    .select(CARD_PROJECTION)
+    .sort({ rating: -1, updatedAt: -1 })
+    .limit(safeLimit)
+    .lean<
+      Pick<
+        IManhwa,
+        | "title"
+        | "slug"
+        | "coverImage"
+        | "status"
+        | "latestChapterNumber"
+        | "rating"
+        | "genres"
+      >[]
+    >();
+
+  return results;
+}
+
+/**
  * Admin-only list fetcher (includes drafts).
  */
 export async function getAdminManhwaList(

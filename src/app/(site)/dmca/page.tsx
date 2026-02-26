@@ -71,7 +71,7 @@ export default function DmcaPage() {
       <h2>Contact for DMCA Notices</h2>
       <p>
         Please send your DMCA takedown notice via email to:{" "}
-        <strong>[your-email@example.com]</strong>
+        <strong>[wenevergiveup17@gmail.com]</strong>
       </p>
 
       <h2>Response Time</h2>
@@ -80,6 +80,22 @@ export default function DmcaPage() {
         <strong>48-72 hours</strong> of receiving a complete and valid notice.
         Links to the reported content will be removed from our index upon
         verification.
+      </p>
+
+      <h2>Counter-Notification</h2>
+      <p>
+        If you believe your content was removed in error, you may submit a
+        counter-notification with: (1) identification of the removed material
+        and its prior location, (2) a statement under penalty of perjury that
+        the removal was a mistake or misidentification, (3) your name, address,
+        and phone number, and (4) consent to the jurisdiction of the relevant
+        courts and acceptance of service from the original complainant.
+      </p>
+
+      <h2>Misrepresentation</h2>
+      <p>
+        Submitting false or misleading information in a DMCA notice or
+        counter-notice may result in liability under applicable law.
       </p>
 
       <h2>Repeat Infringers</h2>
